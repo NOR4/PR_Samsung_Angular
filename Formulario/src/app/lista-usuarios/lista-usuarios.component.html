@@ -1,0 +1,142 @@
+
+
+<div class="formulario">
+    <h2> Crear/editar usuario:</h2>
+    <form class="container" (submit)= " registerUser() " #forma="ngForm">    
+        
+            <mat-form-field appearance="fill" class="form-input name">
+            <mat-label for="name">Nombre</mat-label>
+            <input matInput required 
+                [ngModelOptions]="{standalone: true}" 
+                [(ngModel)]= " user.name " 
+                type="text" minlength="3"
+                #name="ngModel">
+                <div class="invalid-feedback" *ngIf="name.invalid && (name.dirty || name.touched)">
+                    <div *ngIf="name.errors.minlength">
+                        Introduzca un nombre con al menos 3 caracteres.
+                    </div>
+                    <div *ngIf="name.errors.required">
+                        Introduzca un nombre válido, por favor.
+                    </div>
+                </div>
+            </mat-form-field>     
+        
+
+            <mat-form-field appearance="fill" class="form-input surname">
+                <mat-label>Apellidos</mat-label>
+                <input matInput required name="surname"
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]= " user.surname " 
+                type="text" minlength="3"
+                #surname="ngModel">
+                <div class="invalid-feedback" *ngIf="surname.invalid && (surname.dirty || surname.touched)">
+                    <div *ngIf="surname.errors.minlength">
+                        Introduzca al menos 3 caracteres.
+                    </div>
+                    <div *ngIf="surname.errors.required">
+                        Campo requerido.
+                    </div>
+                </div>
+            </mat-form-field>
+  
+            <mat-form-field appearance="fill" class="form-input age"> 
+                <mat-label for="age">Edad</mat-label>
+                <input matInput required name="age"
+                [ngModelOptions]="{standalone: true}" 
+                [(ngModel)]= " user.age " 
+                type="number" 
+                #age="ngModel">
+                <div class="invalid-feedback" *ngIf="age.invalid && (age.dirty || age.touched)">
+                    <div *ngIf="age.errors">
+                        Entre 12 y 125 años.
+                    </div>
+                    <div *ngIf="age.errors.required">
+                        Campo requerido.
+                    </div>
+                </div>      
+            </mat-form-field>
+   
+            <mat-form-field appearance="fill" class="form-input dni">
+                <mat-label for="dni">DNI / NIE</mat-label>
+                <input matInput required  
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]= " user.dni " 
+                type="text" pattern="[0-9]{8}[A-Za-z]{1}"
+                #dni="ngModel">
+                <div class="invalid-feedback" *ngIf="dni.invalid && (dni.dirty || dni.touched)">
+                    <div *ngIf="dni.errors.pattern">
+                        Introduzca un DNI válido, por favor.
+                    </div>
+                    <div *ngIf="dni.errors.required">
+                        Campo requerido.
+                    </div>
+                </div>
+            </mat-form-field>      
+
+            <mat-form-field appearance="fill" class="form-input gender">
+                <mat-label>Género</mat-label>
+                <input matInput [ngModelOptions]="{standalone: true}"
+                [(ngModel)]= " user.gender " 
+                type="text" >
+                <mat-select [ngModelOptions]="{standalone: true}"
+                [(ngModel)]= " user.gender " >
+                    <mat-option value="mujer">Mujer</mat-option>
+                    <mat-option value="hombre">Hombre</mat-option>
+                    <mat-option value="otro">Otro</mat-option>
+                    <mat-option value="noEspecificado">No especificado</mat-option>
+                    
+                  </mat-select>
+            </mat-form-field>
+
+            <mat-form-field  appearance="fill" class="form-input birthday">
+                <mat-label>Fecha de nacimiento</mat-label>
+                <input matInput [matDatepicker]="picker"
+                required [ngModelOptions]="{standalone: true}"
+                [(ngModel)]= " user.birthday " 
+                type="text" >
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+    
+            <mat-form-field appearance="fill" class="form-input favColor">
+                <mat-label for="favColor">Color favorito</mat-label>
+                <input matInput required name="favColor"
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]= " user.favColor " 
+                type="text" #favColor="ngModel"
+                minlength="3">
+                <div class="invalid-feedback" *ngIf="favColor.invalid">
+                    <div *ngIf="favColor.errors.minlength">
+                        Introduzca al menos 3 caracteres.
+                    </div>
+                    <div *ngIf="favColor.errors.required">
+                        Campo requerido.
+                    </div>
+                </div>
+            </mat-form-field>
+        
+        <button type="submit" class="form-button" [disabled]="!forma.form.valid" (onClick)="registerUser()"> Añadir Usuario</button>
+    </form>
+</div>
+
+
+<div class="userList">
+    <h2>Usuario actual: </h2>
+    <h2> {{ user.name }} {{ user.surname }} </h2>
+    <h2>Lista de usuarios</h2>
+    <mat-list>
+        <mat-list-item *ngFor=" let eachUser of usersList; let i = index ">
+            <!-- {{ i }} -->
+            <mat-icon matListIcon>account_circle</mat-icon>
+
+            <h2 matLine>{{ eachUser.name }} {{ eachUser.surname }}</h2>
+            <h5 matLine>DNI: {{ eachUser.dni }}</h5>
+            <h5 matLine>Nacid@ en {{eachUser.birthday | date: "dd/MM/yyyy"}}, {{ eachUser.age }} años, {{eachUser.gender}}.</h5>
+            <h5 matLine>Su color favorito es el {{ eachUser.favColor }}.</h5>
+            <div class="button-container">
+                <button class="update-button" (click)="actualizar ( i )">Editar</button>
+                <button class="erase-button" (click)="eliminar(i)">Eliminar</button>
+            </div>
+        </mat-list-item>
+    </mat-list>
+</div>
